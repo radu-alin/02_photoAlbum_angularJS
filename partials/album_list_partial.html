@@ -1,0 +1,87 @@
+<div class="container">
+  <div ng-controller="AlbumListController" ng-init="albums">
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">Enter search term:</span>
+      <input
+        type="text"
+        class="form-control"
+        aria-describedby="basic-addon1"
+        placeholder="Type to search ..."
+        ng-model="searchFor"
+      />
+    </div>
+    <hr />
+    <p>There are {{albums.length}} albums available to view.</p>
+    <hr />
+    <div class="album-items">
+      <div
+        class="album-item panel panel-primary"
+        ng-repeat="album in albums | filter:{name: searchFor} | orderBy:'date':false"
+      >
+        <!-- default panel contents -->
+        <div class="panel-heading">
+          <div class="panel-title">
+            {{$index + 1 }}. {{album.title | uppercase}} from {{album.date}}
+          </div>
+        </div>
+
+        <div class="panel-body">{{album.description}}</div>
+      </div>
+    </div>
+    <hr />
+    <!-- form add new album start-->
+    <h3>Add new album</h3>
+    <div class="panel panel-primary">
+      <form name="add_album_form" novalidate>
+        <div class="alert alert-danger" role="alert" ng-show="addAlbumFormError">
+          {{addAlbumFormError}}
+        </div>
+        <div class="panel-heading">
+          <div class="panel-title">
+            <div class="form-group">
+              <label for="title">Album title</label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                class="form-control"
+                placeholder="Title..."
+                ng-model="addingAlbum.title"
+              />
+            </div>
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input
+                id="date"
+                type="text"
+                class="form-control"
+                placeholder="yyyy/mm/dd"
+                ng-model="addingAlbum.date"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              class="form-control"
+              placeholder="Short description..."
+              rows="3"
+              ng-model="addingAlbum.description"
+            ></textarea>
+          </div>
+          <button
+            type="button"
+            class="btn btn-success"
+            ng-click="addAlbum(addingAlbum)"
+          >
+            Add new album
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- form add new album end -->
+  </div>
+</div>

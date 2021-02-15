@@ -8,15 +8,6 @@ ul {
   max-width: 700px;
 }
 
-.logged-status {
-  text-align: right;
-  margin-bottom: 2rem;
-}
-
-.logged-status span {
-  padding: 1rem;
-}
-
 .album-items {
   display: flex;
   flex-wrap: wrap;
