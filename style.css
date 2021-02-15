@@ -1,0 +1,29 @@
+body {
+  padding: 5rem;
+}
+ul {
+  list-style: none;
+}
+.container {
+  max-width: 700px;
+}
+
+.logged-status {
+  text-align: right;
+  margin-bottom: 2rem;
+}
+
+.logged-status span {
+  padding: 1rem;
+}
+
+.album-items {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.album-item {
+  width: 300px;
+  min-height: 200px;
+  margin: 1rem;
+}
