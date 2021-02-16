@@ -14,20 +14,30 @@
     <p>There are {{albums.length}} albums available to view.</p>
     <hr />
     <div class="album-items">
+      <div class="alert alert-danger" ng-show="!albums">
+        <p>Sorry no albums for your input search.</p>
+      </div>
       <div
         class="album-item panel panel-primary"
-        ng-repeat="album in albums | filter:{name: searchFor} | orderBy:'date':false"
+        ng-repeat="album in albums | filter:{title: searchFor} | orderBy:'date':false"
       >
         <!-- default panel contents -->
         <div class="panel-heading">
           <div class="panel-title">
-            <a href="#/albums/{{album.id}}">
-              {{$index + 1 }}. {{album.title | uppercase}} from {{album.date}}
+            <a href="#/albums/{{album.name}}">
+              {{album.title | uppercase}} from {{album.date}}
             </a>
           </div>
         </div>
 
-        <div class="panel-body">{{album.description}}</div>
+        <div class="panel-body">
+          <img
+            src="/assets/img/{{album.photos[0].filename}}"
+            width="100%"
+            height="200px"
+          />
+          <p>{{album.description}}</p>
+        </div>
       </div>
     </div>
     <hr />
@@ -41,13 +51,22 @@
         <div class="panel-heading">
           <div class="panel-title">
             <div class="form-group">
-              <label for="title">Album title</label>
+              <label for="title">Album name</label>
+              <input
+                id="name"
+                name="name"
+                type="name"
+                class="form-control"
+                placeholder="Album name..."
+                ng-model="addingAlbum.name"
+              />
+              <label for="title">Album preview title</label>
               <input
                 id="title"
                 name="title"
                 type="text"
                 class="form-control"
-                placeholder="Title..."
+                placeholder="Preview title..."
                 ng-model="addingAlbum.title"
               />
             </div>
