@@ -1,0 +1,18 @@
+<div class="container">
+  <h3>Photo album</h3>
+  <div ng-controller="AlbumViewController">
+    <div class="alert alert-danger" ng-show="loadErrorMessage">
+      {{loadErrorMessage}}
+    </div>
+
+    <div class="photo thumbnail" ng-repeat="photo in photos">
+      <a href="#/albums/{{albumName}}/photos/{{photo.filename}}">
+        <img src="/assets/img/{{photo.filename}}" alt="{{photo.description}}" />
+      </a>
+      <div class="caption">
+        <h3>Image</h3>
+        <p>{{photo.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>

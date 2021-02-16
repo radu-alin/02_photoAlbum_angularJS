@@ -21,7 +21,9 @@
         <!-- default panel contents -->
         <div class="panel-heading">
           <div class="panel-title">
-            {{$index + 1 }}. {{album.title | uppercase}} from {{album.date}}
+            <a href="#/albums/{{album.id}}">
+              {{$index + 1 }}. {{album.title | uppercase}} from {{album.date}}
+            </a>
           </div>
         </div>
 
