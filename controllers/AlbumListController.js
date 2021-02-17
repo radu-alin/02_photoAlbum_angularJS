@@ -1,23 +1,32 @@
 // CONTROLLERS
 angularApp.controller('AlbumListController', [
-  '$scope',
   '$log',
+  '$scope',
+  '$location',
   'albumService',
-  function ($scope, $log, albumService) {
+  function ($log, $scope, $location, albumService) {
     $scope.getLog = albumService.getLog();
-
     $scope.addingAlbum = {};
-    $scope.addAlbumFormError = '';
-    $scope.albums = albumService.getAlbums();
+    $scope.albumsFetchError = '';
+    $scope.isDoneLoading = false;
+
+    albumService.getAlbums(function (err, albums) {
+      if (err) {
+        $scope.albumsFetchError = 'Unexpected error albums occured.';
+      }
+      $scope.isDoneLoading = true;
+      $scope.albums = albums;
+    });
 
     $scope.addAlbum = function (newAlbum) {
-      try {
-        albumService.addAlbum(newAlbum);
-        $scope.addingAlbum = {};
+      albumService.addAlbum(newAlbum, function (err, data) {
+        if (err) {
+          $scope.addAlbumFormError = err.code;
+        }
+        $location.path('/albums/' + newAlbum.name);
         $scope.addAlbumFormError = '';
-      } catch (err) {
-        $scope.addAlbumFormError = err.message;
-      }
+        $scope.addingAlbum = {};
+      });
     };
   },
 ]);

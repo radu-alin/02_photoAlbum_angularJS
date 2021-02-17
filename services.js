@@ -1,92 +1,37 @@
 angularApp.service('albumService', [
   '$log',
-  function ($log) {
-    var albums = [
-      {
-        name: 'madrid1309',
-        title: 'Weekend in Madrid',
-        date: '2013-09-01',
-        description: 'My favourite trip',
-        photos: [
-          {
-            filename: 'madrid01.jpg',
-            date: '2013/09/05',
-            description: 'I love this place, so much good food.',
-          },
-          {
-            filename: 'madrid02.jpg',
-            date: '2013/09/06',
-            description: 'The museo del prado we had a wonderful time here.',
-          },
-        ],
-      },
-      {
-        name: 'iceland1404',
-        title: 'Holiday in Iceland',
-        date: '2014-04-15',
-        description: 'This place is cold',
-        photos: [
-          {
-            filename: 'iceland01.jpg',
-            date: '2014/04/14',
-            description: 'So cold and so much snow!',
-          },
-          {
-            filename: 'iceland02.jpg',
-            date: '2014/04/15',
-            description: 'The northern lights are extremely clear here.',
-          },
-        ],
-      },
-      {
-        name: 'thailand1210',
-        title: 'Surfing in Thailand',
-        date: '2012-10-01',
-        description: 'So hot!',
-        photos: [
-          {
-            filename: 'thailand01.jpg',
-            date: '2012/10/01',
-            description: 'Getting mah surf on!',
-          },
-          {
-            filename: 'thailand02.jpg',
-            date: '2012/10/02',
-            description: 'Thai food FTW!!!11!one!1',
-          },
-        ],
-      },
-      {
-        name: 'australia1207',
-        title: 'Wedding in Australia',
-        date: '2012-07-31',
-        description: 'So many kangaroos and koalas!',
-        photos: [
-          {
-            filename: 'australia01.jpg',
-            date: '2012/07/25',
-            description: 'The wedding was lovely.',
-          },
-          {
-            filename: 'australia02.jpg',
-            date: '2012/07/27',
-            description: 'Great Ocean Road.',
-          },
-        ],
-      },
-    ];
+  '$http',
+  function ($log, $http) {
+    var albums;
+    var _url =
+      'https://angularjs-dummydb-default-rtdb.europe-west1.firebasedatabase.app';
 
-    this.getAlbums = function () {
-      return albums;
+    this.getAlbums = function (callback) {
+      $log.log('fetching albums...');
+      $http({
+        method: 'GET',
+        url: _url + '/albums.json',
+      })
+        .success(function (data, status, headers, conf) {
+          callback(null, data);
+        })
+        .error(function (data, status, headers, conf) {
+          callback(data, null);
+        });
     };
 
-    this.getAlbumByName = function (name) {
-      for (var item of albums) {
-        if (name == item.name) {
-          return item.photos;
-        }
-      }
-      throw new Error('album_not_found');
+    this.getAlbumByName = function (albumName, callback) {
+      $log.log('fetching albumByname...');
+      $http({
+        method: 'GET',
+        url: _url + '/albums.json?orderBy="name"&equalTo="' + albumName + '"',
+      })
+        .success(function (data, status, headers, conf) {
+          callback(null, data);
+        })
+        .error(function (data, status, headers, conf) {
+          callback(data, null);
+        });
     };
 
     this.isValidDate = function (valueDate) {
@@ -97,18 +42,27 @@ angularApp.service('albumService', [
       return false;
     };
 
-    this.addAlbum = function (albumData) {
-      if (!albumData.name) throw new Error('Missing name.');
-      for (var item of albums) {
-        if (albumData.name === item.name) throw new Error('Duplicate album name.');
-      }
-      if (!albumData.title) throw new Error('Missing title.');
-      if (!this.isValidDate(albumData.date)) throw new Error('Date not valid.');
-      if (!albumData.description) throw new Error('Missing description.');
-
-      albums.push(albumData);
+    this.addAlbum = function (albumData, callback) {
+      if (!albumData.name) return callback({ code: 'Missing name.' });
+      if (!albumData.title) return callback({ code: 'Missing title.' });
+      if (!this.isValidDate(albumData.date))
+        return callback({ code: 'Date not valid.' });
+      if (!albumData.description) return callback({ code: 'Missing description.' });
+      $log.log('adding album...');
+      $http({
+        method: 'POST',
+        url: _url + '/albums.json',
+        data: albumData,
+      })
+        .success(function (data, status, headers, conf) {
+          callback(null, data);
+        })
+        .error(function (data, status, headers, conf) {
+          callback(data, null);
+        });
     };
 
+    //devFunction- console.log from html
     this.getLog = function () {
       return function (messageTitle, messageContent) {
         $log.log(messageTitle, messageContent);

@@ -1,18 +1,26 @@
 angularApp.controller('AlbumViewController', [
-  '$scope',
   '$log',
+  '$scope',
   '$routeParams',
   'albumService',
-  function ($scope, $log, $routeParams, albumService) {
+  function ($log, $scope, $routeParams, albumService) {
     $scope.getLog = albumService.getLog();
 
     $scope.albumName = $routeParams.id;
-    $scope.loadErrorMessage = '';
+    $scope.albumFetchError = '';
 
-    try {
-      $scope.photos = albumService.getAlbumByName($scope.albumName);
-    } catch (err) {
-      $scope.loadErrorMessage = "Couldn't find that album.";
-    }
+    albumService.getAlbumByName($scope.albumName, function (err, data) {
+      if (err) {
+        $scope.albumFetchError = "Couldn't find that album.";
+      }
+      var d;
+      for (var key in data) {
+        d = data[key].photos;
+      }
+      if (!d) {
+        $scope.albumFetchError = "Couldn't find that album.";
+      }
+      $scope.photos = d;
+    });
   },
 ]);

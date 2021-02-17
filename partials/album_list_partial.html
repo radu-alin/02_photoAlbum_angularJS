@@ -1,5 +1,9 @@
 <div class="container">
-  <div ng-controller="AlbumListController" ng-init="albums">
+  <div class="alert alert-danger" ng-show="albumsFetchError">
+    {{albumsFetchError}}
+  </div>
+  <div ng-show="!isDoneLoading">loading...</div>
+  <div ng-show="isDoneLoading">
     <div class="input-group">
       <span class="input-group-addon" id="basic-addon1">Enter search term:</span>
       <input
@@ -31,11 +35,7 @@
         </div>
 
         <div class="panel-body">
-          <img
-            src="/assets/img/{{album.photos[0].filename}}"
-            width="100%"
-            height="200px"
-          />
+          <img ng-src="{{album.photos[0].filename}}" width="100%" height="200px" />
           <p>{{album.description}}</p>
         </div>
       </div>
