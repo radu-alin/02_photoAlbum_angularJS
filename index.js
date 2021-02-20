@@ -1,2 +1,2 @@
 // MODULE
-var angularApp = angular.module('angularApp', ['ngRoute']);
+var angularApp = angular.module('angularApp', ['ngRoute', 'ngCookies']);

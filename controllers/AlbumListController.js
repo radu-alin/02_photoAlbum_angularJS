@@ -3,8 +3,9 @@ angularApp.controller('AlbumListController', [
   '$log',
   '$scope',
   '$location',
+  '$cookieStore',
   'albumService',
-  function ($log, $scope, $location, albumService) {
+  function ($log, $scope, $location, $cookieStore, albumService) {
     $scope.getLog = albumService.getLog();
     $scope.addingAlbum = {};
     $scope.albumsFetchError = '';
@@ -14,8 +15,17 @@ angularApp.controller('AlbumListController', [
       if (err) {
         $scope.albumsFetchError = 'Unexpected error albums occured.';
       }
+      var d = [];
+      for (var key in albums) {
+        d.push(albums[key]);
+      }
       $scope.isDoneLoading = true;
-      $scope.albums = albums;
+      $scope.albums = d;
+      $log.log(d);
+      for (var item of d) {
+        var name = item.name;
+        $cookieStore.put(name, item.description);
+      }
     });
 
     $scope.addAlbum = function (newAlbum) {

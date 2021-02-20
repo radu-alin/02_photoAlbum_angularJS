@@ -1,0 +1,11 @@
+<div class="panel-heading">
+  <div class="panel-title">
+    <a href="#/albums/{{albumdata.name}}">
+      {{albumdata.title}} from {{album.date}}
+    </a>
+  </div>
+</div>
+<div class="panel-body" pa-angry-plus>
+  <img ng-src="{{albumdata.photos[0].filename}}" width="100%" height="200px" />
+  <p>{{albumdata.description}}</p>
+</div>

@@ -15,30 +15,20 @@
       />
     </div>
     <hr />
-    <p>There are {{albums.length}} albums available to view.</p>
+    <p>
+      There are {{albums.length}} {{'albums available to view' | toUppercaseFilter}}.
+    </p>
     <hr />
     <div class="album-items">
       <div class="alert alert-danger" ng-show="!albums">
         <p>Sorry no albums for your input search.</p>
       </div>
-      <div
+      <pa-album-overview
         class="album-item panel panel-primary"
+        albumdata="album"
         ng-repeat="album in albums | filter:{title: searchFor} | orderBy:'date':false"
       >
-        <!-- default panel contents -->
-        <div class="panel-heading">
-          <div class="panel-title">
-            <a href="#/albums/{{album.name}}">
-              {{album.title | uppercase}} from {{album.date}}
-            </a>
-          </div>
-        </div>
-
-        <div class="panel-body">
-          <img ng-src="{{album.photos[0].filename}}" width="100%" height="200px" />
-          <p>{{album.description}}</p>
-        </div>
-      </div>
+      </pa-album-overview>
     </div>
     <hr />
     <!-- form add new album start-->
